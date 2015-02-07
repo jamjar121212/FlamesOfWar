@@ -7,27 +7,27 @@ public class InputManager : MonoBehaviour {
 	public PieceSelection pieceSelection;
 
 	void Start () {
-		this.pieceSelection = this.gameObject.GetComponent<PieceSelection>();
-		Debug.Log ("initialising input manager...");
+		this.pieceSelection = this.gameObject.GetComponent<PieceSelection> ();
 	}
 	
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
 			isMouseDown = true;
-			this.SelectObject();
+			RaycastHit objectClickedOn = this.SelectObject();
+			pieceSelection.PieceClicked(objectClickedOn.transform.gameObject);
 		}
 
 		if (Input.GetMouseButtonUp(0)) {
 			isMouseDown = false;
+			RaycastHit objectReleasedOn = this.SelectObject();
+			this.pieceSelection.PieceDropped(objectReleasedOn.transform.gameObject);
 		}
 	}
 
-	void SelectObject() {
+	RaycastHit SelectObject() {
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if(Physics.Raycast(ray, out hit)) 
-		{
-			Debug.Log("Clicked Something!");
-		}
+		Physics.Raycast(ray, out hit);
+		return hit;
 	}
 }
