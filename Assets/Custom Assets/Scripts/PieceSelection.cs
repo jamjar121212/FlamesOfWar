@@ -10,23 +10,29 @@ public class PieceSelection : MonoBehaviour {
 	void Start () {
 		this.actionResolution = this.gameObject.GetComponent<ActionResolution> ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void MouseClicked() {
+		RaycastHit hit = this.SelectObject ();
+		this.PieceClicked(hit.transform.gameObject);
 	}
 
+	public void MouseReleased() {
+		BroadcastMessage ("PieceDropped", this.selectedPiece);
+		this.selectedPiece = null;
+	}
+	
 	public void PieceClicked(GameObject piece) {
 		if (piece.CompareTag ("Infantry")) {
-			Debug.Log ("Piece Clicked.");
-			selectedPiece = piece;
-		}
+			Debug.Log ("Piece Selected.");
+			this.selectedPiece = piece;
+			BroadcastMessage ("PieceSelected", selectedPiece);
+		} 
 	}
 
-	public void PieceDropped(GameObject pieceDroppedOn) {
-		if (selectedPiece) {
-			this.actionResolution.ResolveAction (this.selectedPiece, pieceDroppedOn);
-			this.selectedPiece = null;
-		}
+	public RaycastHit SelectObject() {
+		RaycastHit hit;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		Physics.Raycast(ray, out hit);
+		return hit;
 	}
 }
