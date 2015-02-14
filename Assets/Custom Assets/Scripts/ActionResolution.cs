@@ -21,7 +21,7 @@ public class ActionResolution : MonoBehaviour {
 
 	public void PieceSelected(GameObject pieceSelected) {
 		if (currentAction == ActionResolution.Action.Movement) {
-			BroadcastMessage("BeginMovement", pieceSelected);
+			//BroadcastMessage("BeginMovement", pieceSelected);
 		}
 	}
 	

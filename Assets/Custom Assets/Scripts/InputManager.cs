@@ -4,6 +4,11 @@ using System.Collections;
 public class InputManager : MonoBehaviour {
 
 	public bool isMouseDown = false;
+	public delegate void onMouseDownDelegate();
+	public delegate void onMouseUpDelegate();
+
+	public event onMouseDownDelegate onMouseDown;
+	public event onMouseUpDelegate onMouseUp;
 
 	void Start () {
 	}
@@ -11,12 +16,16 @@ public class InputManager : MonoBehaviour {
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
 			isMouseDown = true;
-			BroadcastMessage("MouseClicked");
+			if (onMouseDown != null) {
+				onMouseDown();
+			}
 		}
 
 		if (Input.GetMouseButtonUp(0)) {
 			isMouseDown = false;
-			BroadcastMessage("MouseReleased");
+			if (onMouseUp != null) {
+				onMouseUp();
+			}
 		}
 	}
 	
